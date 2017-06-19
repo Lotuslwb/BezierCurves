@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>贝塞尔曲线绘制原理--优化和深入</title>
+    <style>
+        html, body {
+            margin: 0;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<canvas id="myCanvas" width="900" height="900" style="background: #f3f3f3;">
+    您的浏览器不支持canvas标签。
+</canvas>
+
+<!-- 将公用方法抽出-->
+<script src="utils.js"></script>
+<script>
+    var myCanvas = document.getElementById('myCanvas');
+    var myCtx = myCanvas.getContext('2d');
+
+    //初始化3个点
+    var P0 = {
+        x: 30,
+        y: 30,
+        name: 'P0'
+    };
+    var P1 = {
+        x: 300,
+        y: 300,
+        name: 'P1'
+    };
+    var P2 = {
+        x: 500,
+        y: 30,
+        name: 'P2'
+    };
+
+    var PointList = [P0, P1, P2];
+    //绘制三个点
+    for (var i = 0; i < PointList.length; i++) {
+        var point = PointList[i];
+        fillPoint(myCtx, point);
+    }
+    //连线P0,P1,P2
+    linePoint(myCtx, PointList);
+
+    var t = 1 /5;
+    var P3 = getTPoint(myCtx, P0, P1, t, {name: 'P3'})
+
+    //在线段P1P2 上找到t距离的点 P4, 即P1P4:P1P2=t;
+    var P4 = getTPoint(myCtx, P1, P2, t, {name: 'P4'});
+
+    //连线P3P4
+    linePoint(myCtx, [P3, P4]);
+
+    //在线段P3P4 上找到t距离的点P5  即P3P5:P3P4=t;
+    var P5 = getTPoint(myCtx, P3, P4, t, {name: 'P5'});
+
+
+    //通过精度 拿到大数量的t, 将点汇聚成曲线
+    var precision = 500;
+    for (var i = 0; i < precision; i++) {
+        var t = i / precision;
+        getBezierPoint(t);
+    }
+
+    // 根据t获得贝塞尔曲线上面的点
+    function getBezierPoint(t) {
+        // 在线段P0P1 上找到t比例的点P3, 即 P0P3:P0P1=t;
+        var P3 = getTPoint(myCtx, P0, P1, t, {needfill: false})
+
+        //在线段P1P2 上找到t距离的点 P4, 即P1P4:P1P2=t;
+        var P4 = getTPoint(myCtx, P1, P2, t, {needfill: false});
+
+        //在线段P3P4 上找到t距离的点P5  即P3P5:P3P4=t;
+        var P5 = getTPoint(myCtx, P3, P4, t);
+
+        return P5;
+    }
+
+</script>
+</body>
+</html>

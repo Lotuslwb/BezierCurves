@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>贝塞尔曲线绘制原理</title>
+    <style>
+        html, body {
+            margin: 0;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<canvas id="myCanvas" width="900" height="900" style="background: #f3f3f3;">
+    您的浏览器不支持canvas标签。
+</canvas>
+<script>
+    var myCanvas = document.getElementById('myCanvas');
+    var myCtx = myCanvas.getContext('2d');
+
+    //初始化3个点
+    var P0 = {
+        x: 30,
+        y: 30,
+        name: 'P0'
+    };
+    var P1 = {
+        x: 300,
+        y: 300,
+        name: 'P1'
+    };
+    var P2 = {
+        x: 500,
+        y: 30,
+        name: 'P2'
+    };
+
+
+    var PointList = [P0, P1, P2];
+    //绘制三个点
+    for (var i = 0; i < PointList.length; i++) {
+        var point = PointList[i];
+        fillPoint(myCtx, point);
+    }
+    //连线P0,P1,P2
+    linePoint(myCtx, PointList);
+
+    var t = 1 / 5;
+
+    // 在线段P0P1 上找到t比例的点P3, 即 P0P3:P0P1=t;
+    var P3 = {
+        name: 'P3',
+        x: P0.x + (P1.x - P0.x) * t,
+        y: P0.y + (P1.y - P0.y) * t,
+    }
+    fillPoint(myCtx, P3);
+
+    //在线段P1P2 上找到t距离的点 P4, 即P1P4:P1P2=t;
+    var P4 = {
+        name: 'P4',
+        x: P1.x + (P2.x - P1.x) * t,
+        y: P1.y + (P2.y - P1.y) * t,
+    }
+    fillPoint(myCtx, P4);
+
+    //连线P3P4
+    linePoint(myCtx, [P3, P4]);
+
+    //在线段P3P4 上找到t距离的点P5  即P3P5:P3P4=t;
+    var P5 = {
+        name: 'P5',
+        x: P3.x + (P4.x - P3.x) * t,
+        y: P3.y + (P4.y - P3.y) * t,
+    }
+    fillPoint(myCtx, P5);
+    console.log('P5 在P0P2 为起点终点,P1为控制点的 二次贝塞尔曲线上');
+
+    function fillPoint(ctx, point) {
+        if (!ctx || !point) {
+            return false;
+        }
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, 2, 0, 2 * Math.PI, true);
+        ctx.fill();
+        ctx.font = "36px";
+        ctx.fillText(point.name + '(' + point.x + ',' + point.y + ')', point.x + 10, point.y);
+        ctx.closePath();
+    }
+    function linePoint(ctx, PointList) {
+        if (!ctx || !PointList.length) {
+            return false;
+        }
+        ctx.beginPath();
+        for (var i = 0; i < PointList.length; i++) {
+            var point = PointList[i];
+
+            if (i == 0) {
+                ctx.moveTo(point.x, point.y);
+            } else {
+                ctx.lineTo(point.x, point.y);
+            }
+        }
+        ctx.stroke();
+        ctx.closePath();
+    }
+</script>
+</body>
+</html>
