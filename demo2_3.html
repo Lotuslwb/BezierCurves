@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>贝塞尔曲线绘制原理-二次贝塞尔曲线基础</title>
+    <style>
+        html, body {
+            margin: 0;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<svg width="190px" height="860px">
+    <!--M moveTo  C 三次贝塞尔曲线  S 简化的三次贝塞尔曲线  Q 二次贝塞尔曲线 T 简化的二次贝塞尔曲线  L  直线-->
+
+    <path d="M10 10 C 20 20, 40 20, 50 10" style="fill:none;stroke:red;"/>
+
+    <path d="M10 50 S 150 150, 200 50" style="fill:none;stroke:red;"/>
+
+    <path d="M10 150 Q 150 250, 200 150" style="fill:none;stroke:red;"/>
+
+    <path d="M10 250 T 50 350 T 200 200" style="fill:none;stroke:red;"/>
+
+    <path d="M10 350 L 50 450 L 200 300" style="fill:none;stroke:red;"/>
+</svg>
+</body>
+</html>

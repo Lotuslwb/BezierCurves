@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>贝塞尔曲线绘制原理-二次贝塞尔曲线基础</title>
+    <style>
+        html, body {
+            margin: 0;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<canvas id="myCanvas" width="900" height="900" style="background: #f3f3f3;">
+    您的浏览器不支持canvas标签。
+</canvas>
+<script src="utils.js"></script>
+<script>
+    //初始化3个点
+    var P0 = {
+        x: 30,
+        y: 30,
+        name: 'P0'
+    };
+    var P1 = {
+        x: 300,
+        y: 300,
+        name: 'P1'
+    };
+    var P2 = {
+        x: 400,
+        y: 300,
+        name: 'P2'
+    };
+    var P3 = {
+        x: 500,
+        y: 30,
+        name: 'P3'
+    };
+
+    var PointList = [P0, P1, P2, P3];
+
+    var myCanvas = document.getElementById('myCanvas');
+    var myCtx = myCanvas.getContext('2d');
+
+    myCtx.beginPath();
+    myCtx.moveTo(P0.x, P0.y);
+
+    //利用bezierCurveTo 绘制canvas 三次贝塞尔曲线
+    // 填入控制点(P1,P2) 和 终点(p3)
+    myCtx.bezierCurveTo(P1.x, P1.y, P2.x, P2.y, P3.x, P3.y);
+
+    myCtx.stroke();
+    myCtx.closePath();
+
+
+    for (var i = 0; i < PointList.length; i++) {
+        fillPoint(myCtx, PointList[i]);
+    }
+    linePoint(myCtx, PointList);
+
+</script>
+</body>
+</html>

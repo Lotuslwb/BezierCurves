@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>贝塞尔曲线绘制原理--由二次变多次</title>
+    <style>
+        html, body {
+            margin: 0;
+            border: none;
+        }
+
+        select {
+            display: block;
+            width: 100px;
+            line-height: 40px;
+            border: 1px solid #cccccc;
+            margin: 20px;
+        }
+
+        button {
+            display: block;
+            width: 100px;
+            line-height: 40px;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+<select id="mySelect">
+    <option value="3" selected>3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+</select>
+
+<button id="clear">clear</button>
+
+<canvas id="myCanvas" width="900" height="900" style="background: #f3f3f3;">
+    您的浏览器不支持canvas标签。
+</canvas>
+
+<!-- 将公用方法抽出-->
+<script src="utils.js"></script>
+<script>
+    var myCanvas = document.getElementById('myCanvas');
+    var myCtx = myCanvas.getContext('2d');
+    var mySelect = document.getElementById('mySelect');
+    var clear = document.getElementById('clear');
+    var PointList = [];
+    var animationFrame;
+
+    mySelect.addEventListener('change', function () {
+        myCtx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+        PointList = [];
+        window.cancelAnimationFrame(animationFrame);
+    })
+    clear.addEventListener('click', function () {
+        myCtx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+        PointList = [];
+        window.cancelAnimationFrame(animationFrame);
+    })
+
+    myCanvas.addEventListener('click', function (e) {
+        var len = PointList.length;
+        var v = mySelect.value * 1
+        if (len < v) {
+            var p = {
+                'name': 'P' + len,
+                'x': e.offsetX,
+                'y': e.offsetY
+            };
+
+            PointList.push(p);
+            fillPoint(myCtx, p);
+        }
+
+        if (PointList.length == v) {
+            init();
+        }
+    })
+
+
+    function init() {
+        window.cancelAnimationFrame(animationFrame);
+        //通过精度 拿到大数量的t, 将点汇聚成曲线
+        var maxPrecision = 500, currentPrecision = 0;
+
+        drawKeyframe()
+
+        function drawKeyframe() {
+            currentPrecision++;
+            if (currentPrecision <= maxPrecision) {
+                myCtx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+
+                for (var i = 0; i < PointList.length; i++) {
+                    var point = PointList[i];
+                    fillPoint(myCtx, point);
+                }
+
+
+                //连线
+                linePoint(myCtx, PointList);
+
+                for (var i = 0; i < currentPrecision; i++) {
+                    var t = i / maxPrecision;
+                    fillPoint(myCtx, getBezierPoint(PointList, t));
+                }
+                animationFrame = window.requestAnimationFrame(drawKeyframe);
+            }
+        }
+    }
+
+
+    // 根据t获得贝塞尔曲线上面的点
+    function getBezierPoint(plist, t) {
+        var newlist = [];
+        for (var i = 0; i < plist.length - 1; i++) {
+            var p = getTPoint(myCtx, plist[i], plist[i + 1], t, {needFill: false});
+            newlist.push(p);
+        }
+
+        if (newlist.length > 1) {
+            return getBezierPoint(newlist, t);
+        } else {
+            return newlist[0];
+        }
+    }
+
+</script>
+</body>
+</html>

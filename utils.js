@@ -44,10 +44,10 @@ function fillPoint(ctx, point) {
  * */
 
 function getTPoint(myCtx, P0, P1, t, option) {
-    var needfill = true, name = '';
+    var needFill = true, name = '';
 
     if (option) {
-        needfill = typeof option.needfill == 'boolean' ? option.needfill : true;
+        needFill = typeof option.needFill == 'boolean' ? option.needFill : true;
         name = option.name || '';
     }
 
@@ -56,7 +56,7 @@ function getTPoint(myCtx, P0, P1, t, option) {
         x: P0.x + (P1.x - P0.x) * t,
         y: P0.y + (P1.y - P0.y) * t,
     }
-    if (needfill) {
+    if (needFill) {
         fillPoint(myCtx, TP);
     }
 

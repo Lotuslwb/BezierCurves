@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>贝塞尔曲线绘制原理</title>
+    <title>贝塞尔曲线绘制原理-二次贝塞尔曲线基础</title>
     <style>
         html, body {
             margin: 0;
@@ -42,38 +42,40 @@
         var point = PointList[i];
         fillPoint(myCtx, point);
     }
+
     //连线P0,P1,P2
     linePoint(myCtx, PointList);
 
-    var t = 1 / 5;
+        // 随意设置一个比例
+        var t = 1 / 5;
+        // 在线段P0P1 上找到t比例的点P3, 即 P0P3:P0P1=t;
+        var P3 = {
+            name: 'P3',
+            x: P0.x + (P1.x - P0.x) * t,
+            y: P0.y + (P1.y - P0.y) * t,
+        }
+        fillPoint(myCtx, P3);
 
-    // 在线段P0P1 上找到t比例的点P3, 即 P0P3:P0P1=t;
-    var P3 = {
-        name: 'P3',
-        x: P0.x + (P1.x - P0.x) * t,
-        y: P0.y + (P1.y - P0.y) * t,
-    }
-    fillPoint(myCtx, P3);
+        //在线段P1P2 上找到t距离的点 P4, 即P1P4:P1P2=t;
+        var P4 = {
+            name: 'P4',
+            x: P1.x + (P2.x - P1.x) * t,
+            y: P1.y + (P2.y - P1.y) * t,
+        }
+        fillPoint(myCtx, P4);
 
-    //在线段P1P2 上找到t距离的点 P4, 即P1P4:P1P2=t;
-    var P4 = {
-        name: 'P4',
-        x: P1.x + (P2.x - P1.x) * t,
-        y: P1.y + (P2.y - P1.y) * t,
-    }
-    fillPoint(myCtx, P4);
+        //连线P3P4
+        linePoint(myCtx, [P3, P4]);
 
-    //连线P3P4
-    linePoint(myCtx, [P3, P4]);
+        //在线段P3P4 上找到t距离的点P5  即P3P5:P3P4=t;
+        var P5 = {
+            name: 'P5',
+            x: P3.x + (P4.x - P3.x) * t,
+            y: P3.y + (P4.y - P3.y) * t,
+        }
+        fillPoint(myCtx, P5);
+        console.log('P5 在P0P2 为起点终点,P1为控制点的 二次贝塞尔曲线上');
 
-    //在线段P3P4 上找到t距离的点P5  即P3P5:P3P4=t;
-    var P5 = {
-        name: 'P5',
-        x: P3.x + (P4.x - P3.x) * t,
-        y: P3.y + (P4.y - P3.y) * t,
-    }
-    fillPoint(myCtx, P5);
-    console.log('P5 在P0P2 为起点终点,P1为控制点的 二次贝塞尔曲线上');
 
     function fillPoint(ctx, point) {
         if (!ctx || !point) {
