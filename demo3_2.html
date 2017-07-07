@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>贝塞尔曲线绘制原理--动态版本</title>
+    <style>
+        html, body {
+            margin: 0;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<canvas id="myCanvas" width="900" height="900" style="background: #f3f3f3;">
+    您的浏览器不支持canvas标签。
+</canvas>
+
+<!-- 将公用方法抽出-->
+<script src="utils.js"></script>
+<script>
+    var myCanvas = document.getElementById('myCanvas');
+    var myCtx = myCanvas.getContext('2d');
+
+    //初始化3个点
+    var P0 = {
+        x: 30,
+        y: 30,
+        name: 'P0'
+    };
+    var P1 = {
+        x: 300,
+        y: 300,
+        name: 'P1'
+    };
+    var P2 = {
+        x: 500,
+        y: 30,
+        name: 'P2'
+    };
+
+    var PointList = [P0, P1, P2];
+
+
+    //通过精度 拿到大数量的t, 将点汇聚成曲线
+    var maxPrecision = 500, currentPrecision = 1;
+
+    drawKeyframe()
+
+    function drawKeyframe() {
+        currentPrecision++;
+        if (currentPrecision <= maxPrecision) {
+            myCtx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+
+            //绘制三个点
+            for (var i = 0; i < PointList.length; i++) {
+                var point = PointList[i];
+                fillPoint(myCtx, point);
+            }
+            //连线P0,P1,P2
+            linePoint(myCtx, PointList);
+
+            for (var i = 0; i < currentPrecision; i++) {
+                var t = i / maxPrecision;
+                getBezierPoint(t);
+            }
+            window.requestAnimationFrame(drawKeyframe);
+        }
+    }
+
+
+    // 根据t获得贝塞尔曲线上面的点
+    function getBezierPoint(t) {
+        var p = {
+            x: quadraticBezierFunction(P0.x, P1.x, P2.x, t),
+            y: quadraticBezierFunction(P0.y, P1.y, P2.y, t)
+        };
+        fillPoint(myCtx, p);
+    }
+
+    function quadraticBezierFunction(p0, p1, p2, t) {
+        if (t > 1 || t < 0) {
+            return false;
+        }
+        return (1 - t) * (1 - t) * p0 + 2 * t * (1 - t) * p1 + t * t * p2;
+    }
+
+</script>
+</body>
+</html>

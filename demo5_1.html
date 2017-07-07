@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>贝塞尔曲线应用--动态波浪</title>
+    <style>
+        html, body {
+            margin: 0;
+            border: none;
+        }
+
+        select {
+            display: block;
+            width: 100px;
+            line-height: 40px;
+            border: 1px solid #cccccc;
+            margin: 20px;
+        }
+
+        button {
+            display: block;
+            width: 100px;
+            line-height: 40px;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="900" height="900" style="background: #f3f3f3;">
+    您的浏览器不支持canvas标签。
+</canvas>
+
+<!-- 将公用方法抽出-->
+<script src="utils.js"></script>
+<script>
+    var myCanvas = document.getElementById('myCanvas');
+    var myCtx = myCanvas.getContext('2d');
+    var canvasHeight = myCanvas.height, canvasWidth = myCanvas.width;
+    var animationFrame;
+    //半波长
+    var waveLen = 100, waveHeight = 100;
+    //水位线初始点
+    var p0 = {
+        x: 0,
+        y: canvasHeight / 2
+    };
+
+
+    drawKeyframe();
+
+    function drawKeyframe() {
+        //记录当前位置
+        var currentX = p0.x, currentY = p0.y;
+        myCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+        myCtx.beginPath();
+        myCtx.moveTo(p0.x, p0.y);
+        for (var i = 0; currentX <= canvasWidth + waveLen; i++) {
+            if (i % 2 == 0) {
+                //上半部波
+                myCtx.quadraticCurveTo(currentX + waveLen, currentY - waveHeight, currentX + waveLen * 2, currentY);
+            } else {
+                //下半部波
+                myCtx.quadraticCurveTo(currentX + waveLen, currentY + waveHeight, currentX + waveLen * 2, currentY);
+            }
+            currentX += waveLen * 2;
+            myCtx.moveTo(currentX, currentY)
+        }
+        myCtx.lineWidth = 5;
+        myCtx.strokeStyle = "red";
+
+        myCtx.stroke();
+        myCtx.closePath();
+        p0.x -= 5;
+        animationFrame = window.requestAnimationFrame(drawKeyframe);
+    }
+
+
+</script>
+</body>
+</html>

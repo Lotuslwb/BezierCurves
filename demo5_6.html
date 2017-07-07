@@ -1,0 +1,90 @@
+<!DOCTYpE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>贝塞尔曲线拟合计算--切线拟合 效果图</title>
+    <style>
+        html, body {
+            margin: 0;
+            border: none;
+        }
+
+        select {
+            display: block;
+            width: 100px;
+            line-height: 40px;
+            border: 1px solid #cccccc;
+            margin: 20px;
+        }
+
+        button {
+            display: block;
+            width: 100px;
+            line-height: 40px;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="900" height="900" style="background: #f3f3f3;">
+    您的浏览器不支持canvas标签。
+</canvas>
+
+<!-- 将公用方法抽出-->
+<script src="utils.js"></script>
+<script>
+    var myCanvas = document.getElementById('myCanvas');
+    var myCtx = myCanvas.getContext('2d');
+    var canvasHeight = myCanvas.height, canvasWidth = myCanvas.width;
+    // 圆R0 圆点
+    var p0 = {
+        x: 120,
+        y: 120,
+        r: 100
+    };
+    // 圆R1 圆点
+    var p1 = {
+        x: 400,
+        y: 400,
+        r: 120
+    };
+
+
+
+    // 获取切点坐标 数组,经过圆外一点有2个切点
+    //p0 为圆心1, p1圆心1, p2为2圆中点,r为圆的半径
+    function getTangencyPoint(p0, p1, p2, r, sencond) {
+        //获取小角 角度
+        var x = Math.abs(p0.x - p1.x);
+        var y = Math.abs(p0.y - p1.y);
+        var angles1 = Math.atan(y / x);
+
+        if (sencond) {
+            angles1 = Math.PI - angles1;
+        }
+
+        //获取大角 角度
+        //中点到圆点的距离
+        var len = Math.sqrt((p0.x - p2.x) * (p0.x - p2.x) + (p0.y - p2.y) * (p0.y - p2.y));
+        var angles2 = Math.acos(r / len);
+
+        //获得需要的角度
+        var angles3 = Math.abs(angles2 - angles1);
+        //获取距离圆心的距离
+        var diffx = Math.cos(angles3) * r;
+        var diffy = Math.sin(angles3) * r;
+
+
+        return [{
+            x: p0.x - diffy,
+            y: p0.y + diffx
+        }, {
+            x: p0.x + diffx,
+            y: p0.y - diffy
+        }]
+
+    }
+</script>
+</body>
+</html>

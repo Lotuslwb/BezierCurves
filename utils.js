@@ -23,6 +23,11 @@ function linePoint(ctx, PointList) {
 
 /*
  * 绘制点,并且在画板上显示点的名字和坐标
+ *
+ * point
+ *  x,y,name
+ *
+ *  如果name为空 则不会显示坐标和名字
  * */
 
 function fillPoint(ctx, point) {
@@ -61,4 +66,17 @@ function getTPoint(myCtx, P0, P1, t, option) {
     }
 
     return TP;
+}
+
+/*
+ * (n k)  --》  getBinomial(n,k) = n1/n2*n3 --》 n!/k!(n-k)!
+ * */
+function getBinomial(n, k) {
+    //  b(n,k)=n1/n2*n3 -- n!/k!(n-k)!
+    if ((typeof n !== 'number') || (typeof k !== 'number'))
+        return false;
+    var coeff = 1;
+    for (var x = n - k + 1; x <= n; x++) coeff *= x;
+    for (x = 1; x <= k; x++) coeff /= x;
+    return coeff;
 }

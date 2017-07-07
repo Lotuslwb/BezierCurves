@@ -1,0 +1,124 @@
+<!DOCTYpE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>贝塞尔曲线拟合计算--矩形拟合</title>
+    <style>
+        html, body {
+            margin: 0;
+            border: none;
+        }
+
+        select {
+            display: block;
+            width: 100px;
+            line-height: 40px;
+            border: 1px solid #cccccc;
+            margin: 20px;
+        }
+
+        button {
+            display: block;
+            width: 100px;
+            line-height: 40px;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="900" height="900" style="background: #f3f3f3;">
+    您的浏览器不支持canvas标签。
+</canvas>
+
+<!-- 将公用方法抽出-->
+<script src="utils.js"></script>
+<script>
+    var myCanvas = document.getElementById('myCanvas');
+    var myCtx = myCanvas.getContext('2d');
+    var canvasHeight = myCanvas.height, canvasWidth = myCanvas.width;
+    // 圆R0 圆点
+    var p0 = {
+        x: 120,
+        y: 120,
+        r: 20
+    };
+    // 圆R1 圆点
+    var p1 = {
+        x: 400,
+        y: 400,
+        r: 20
+    };
+    //获得  R0 和 R1 的中点
+    var p2 = {
+        x: (p0.x + p1.x) / 2,
+        y: (p0.y + p1.y) / 2,
+        name: 'p2'
+    };
+
+    myCtx.beginPath();
+    //画出2个圆
+    myCtx.arc(p0.x, p0.y, p0.r, 0, 2 * Math.PI, true);
+    myCtx.stroke();
+    myCtx.closePath();
+
+    myCtx.beginPath();
+    myCtx.arc(p1.x, p1.y, p1.r, 0, 2 * Math.PI, true);
+    myCtx.stroke();
+    myCtx.closePath();
+
+
+    //画出中点和圆心连线
+    linePoint(myCtx, [p0, p1]);
+    fillPoint(myCtx, p2);
+
+    // p0 的2个端点
+    var p0_1 = {
+        x: p0.x - p0.r / Math.sqrt(2),
+        y: p0.y + p0.r / Math.sqrt(2),
+        name: 'p0_1'
+    }, p0_2 = {
+        x: p0.x + p0.r / Math.sqrt(2),
+        y: p0.y - p0.r / Math.sqrt(2),
+        name: 'p0_2'
+    };
+    linePoint(myCtx, [p0_1, p0_2]);
+    fillPoint(myCtx, p0_1);
+    fillPoint(myCtx, p0_2);
+
+    //p1 的2个端点
+    var p1_1 = {
+        x: p1.x - p1.r / Math.sqrt(2),
+        y: p1.y + p1.r / Math.sqrt(2),
+        name: 'p1_1'
+    }, p1_2 = {
+        x: p1.x + p1.r / Math.sqrt(2),
+        y: p1.y - p1.r / Math.sqrt(2),
+        name: 'p1_2'
+    };
+    linePoint(myCtx, [p1_1, p1_2]);
+    fillPoint(myCtx, p1_1);
+    fillPoint(myCtx, p1_2);
+
+    // 连接2个圆的端点
+    linePoint(myCtx, [p0_1, p1_1]);
+    linePoint(myCtx, [p0_2, p1_2]);
+
+
+    //绘制曲线
+    myCtx.beginPath();
+    myCtx.strokeStyle = 'red';
+    myCtx.moveTo(p0_1.x, p0_1.y);
+    myCtx.quadraticCurveTo(p2.x, p2.y, p1_1.x, p1_1.y);
+    myCtx.stroke();
+    myCtx.closePath();
+
+    myCtx.beginPath();
+    myCtx.strokeStyle = 'red';
+    myCtx.moveTo(p0_2.x, p0_2.y);
+    myCtx.quadraticCurveTo(p2.x, p2.y, p1_2.x, p1_2.y);
+    myCtx.stroke();
+    myCtx.closePath();
+</script>
+</body>
+</html>

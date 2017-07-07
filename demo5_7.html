@@ -1,0 +1,205 @@
+<!DOCTYpE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>贝塞尔曲线拟合计算--qq 消息红点特效</title>
+    <style>
+        html, body {
+            margin: 0;
+            border: none;
+        }
+
+        select {
+            display: block;
+            width: 100px;
+            line-height: 40px;
+            border: 1px solid #cccccc;
+            margin: 20px;
+        }
+
+        button {
+            display: block;
+            width: 100px;
+            line-height: 40px;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="900" height="900" style="background: #f3f3f3;">
+    您的浏览器不支持canvas标签。
+</canvas>
+
+<!-- 将公用方法抽出-->
+<script src="utils.js"></script>
+<script>
+    var myCanvas = document.getElementById('myCanvas');
+    var myCtx = myCanvas.getContext('2d');
+    var canvasHeight = myCanvas.height, canvasWidth = myCanvas.width;
+    var down = false, moving = false, x0 = 0, y0 = 0, pt;
+    // 黏性长度
+    var Len = 150;
+
+    myCanvas.addEventListener('mousedown', function (e) {
+        if (inBall({x: e.x, y: e.y}, p0)) {
+            down = true, x0 = e.pageX, y0 = e.pageY, pt = p0;
+        }
+    });
+
+    myCanvas.addEventListener('mousemove', function (e) {
+        if (down) {
+            var distance = p0 && Math.sqrt((e.x - p0.x) * (e.x - p0.x) + (e.y - p0.y ) * (e.y - p0.y ));
+            if (distance > Len || moving) {
+                moving = true;
+                var p1 = {
+                    x: e.x,
+                    y: e.y,
+                    r: p0.r
+                }
+                myCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+                drawBall(myCtx, p1);
+            } else {
+                var p1 = {
+                    x: pt.x + (e.x - x0),
+                    y: pt.y + (e.y - y0),
+                    r: p0.r * (distance / Len)
+                };
+                var p2 = {
+                    x: p0.x,
+                    y: p0.y,
+                    r: p0.r * (1 - distance / Len)
+                }
+                x0 = e.x, y0 = e.y, pt = p1;
+                myCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+                drawBall(myCtx, p2);
+                drawBall(myCtx, p1);
+                getFittingCurve(myCtx, p2, p1);
+            }
+
+        }
+    })
+
+    myCanvas.addEventListener('mouseup', function (e) {
+        if (down) {
+            down = false, x0 = 0, y0 = 0;
+        }
+        if (moving) {
+            p0.x = e.x, p0.y = e.y;
+            moving = false;
+        }
+
+        myCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+        drawBall(myCtx, p0);
+    });
+
+    // 圆R0 圆点
+    var p0 = {
+        x: 120,
+        y: 120,
+        r: 10
+    };
+    drawBall(myCtx, p0);
+
+
+    function inBall(position, point) {
+        return !(position.x < (point.x - point.r) || position.x > (point.x + point.r) || position.y < (point.y - point.r ) || position.y > (point.y + point.r));
+    }
+
+    function drawBall(ctx, p0) {
+        ctx.beginPath();
+        ctx.arc(p0.x, p0.y, p0.r, 0, 2 * Math.PI, true);
+        ctx.fillStyle = 'red';
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    // 获取切点坐标 数组,经过圆外一点有2个切点
+    //p0 为圆心1, p1圆心1, p2为2圆中点,r为圆的半径
+    function getTangencyPoint(p0, p1, p2, r, sencond) {
+        //获取小角 角度
+        var x = Math.abs(p0.x - p1.x);
+        var y = Math.abs(p0.y - p1.y);
+        var angles1 = Math.atan(y / x);
+        if (sencond) {
+            angles1 = Math.PI - angles1;
+        }
+
+        //获取大角 角度
+        //中点到圆点的距离
+        var len = Math.sqrt((p0.x - p2.x) * (p0.x - p2.x) + (p0.y - p2.y) * (p0.y - p2.y));
+        var angles2 = Math.acos(r / len);
+
+        //获得需要的角度
+        var angles3 = Math.abs(angles2 - angles1);
+        //获取距离圆心的距离
+        var diffx = Math.cos(angles3) * r;
+        var diffy = Math.sin(angles3) * r;
+
+
+        return [{
+            x: p0.x - diffy,
+            y: p0.y + diffx
+        }, {
+            x: p0.x + diffx,
+            y: p0.y - diffy
+        }]
+
+    }
+
+    function getFittingCurve(myCtx, p0, p1) {
+        //获得  R0 和 R1 的中点
+        var p2 = {
+            x: (p0.x + p1.x) / 2,
+            y: (p0.y + p1.y) / 2,
+            name: 'p2'
+        };
+
+        myCtx.beginPath();
+        //画出2个圆
+        myCtx.arc(p0.x, p0.y, p0.r, 0, 2 * Math.PI, true);
+        myCtx.fill();
+        myCtx.closePath();
+
+        myCtx.beginPath();
+        myCtx.arc(p1.x, p1.y, p1.r, 0, 2 * Math.PI, true);
+        myCtx.fill();
+        myCtx.closePath();
+
+        // p0 的2个端点
+        var p0_1 = {
+            x: p0.x - p0.r / Math.sqrt(2),
+            y: p0.y + p0.r / Math.sqrt(2),
+            name: 'p0_1'
+        }, p0_2 = {
+            x: p0.x + p0.r / Math.sqrt(2),
+            y: p0.y - p0.r / Math.sqrt(2),
+            name: 'p0_2'
+        };
+        var p0_1 = getTangencyPoint(p0, p1, p2, p0.r)[0];
+        var p0_2 = getTangencyPoint(p0, p1, p2, p0.r)[1];
+        p0_1.name = 'P0_1';
+        p0_2.name = 'P0_2';
+
+
+        //p1 的2个端点
+        var p1_1 = getTangencyPoint(p1, p0, p2, p1.r, true)[0];
+        var p1_2 = getTangencyPoint(p1, p0, p2, p1.r, true)[1];
+        p1_1.name = 'P1_1';
+        p1_2.name = 'P1_1';
+
+        //绘制曲线
+        myCtx.beginPath();
+        myCtx.strokeStyle = 'red';
+        myCtx.moveTo(p0_1.x, p0_1.y);
+        myCtx.lineTo(p0_2.x, p0_2.y);
+        myCtx.quadraticCurveTo(p2.x, p2.y, p1_2.x, p1_2.y);
+        myCtx.lineTo(p1_1.x, p1_1.y);
+        myCtx.quadraticCurveTo(p2.x, p2.y, p0_1.x, p0_1.y);
+        myCtx.fill();
+        myCtx.closePath();
+    }
+
+</script>
+</body>
+</html>
