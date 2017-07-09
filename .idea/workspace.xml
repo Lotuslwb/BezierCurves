@@ -2,21 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4335068c-2cc1-41ab-a342-14eb526a187e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo3_1.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo3_2.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo3_3.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo4_1.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo4_2.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo5_1.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo5_2.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo5_3.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo5_4.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo5_5.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo5_6.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo5_7.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils.js" afterPath="$PROJECT_DIR$/utils.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <ignored path="BezierCurves.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -67,12 +53,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="demo5_5.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="demo5_5.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/demo5_5.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="453">
               <caret line="161" column="5" selection-start-line="129" selection-start-column="0" selection-end-line="161" selection-end-column="5" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="1009">
+                <caret line="608" column="16" selection-start-line="608" selection-start-column="16" selection-end-line="608" selection-end-column="16" />
+                <folding />
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -103,7 +102,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/demo1.html" />
         <option value="$PROJECT_DIR$/demo1_1.html" />
         <option value="$PROJECT_DIR$/demo1_2.html" />
@@ -126,6 +124,7 @@
         <option value="$PROJECT_DIR$/demo5_5.html" />
         <option value="$PROJECT_DIR$/demo5_6.html" />
         <option value="$PROJECT_DIR$/demo5_7.html" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -279,12 +278,12 @@
       <workItem from="1498413719200" duration="13029000" />
       <workItem from="1498549901284" duration="8506000" />
       <workItem from="1499244181677" duration="9038000" />
-      <workItem from="1499344020913" duration="19125000" />
+      <workItem from="1499344020913" duration="19409000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="79709000" />
+    <option name="totallyTimeSpent" value="79993000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="709" extended-state="6" />
@@ -491,16 +490,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="30">
-            <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/demo2_1.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="183">
@@ -679,6 +668,17 @@
         <state relative-caret-position="453">
           <caret line="161" column="5" selection-start-line="129" selection-start-column="0" selection-end-line="161" selection-end-column="5" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="1009">
+            <caret line="608" column="16" selection-start-line="608" selection-start-column="16" selection-end-line="608" selection-end-column="16" />
+            <folding />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
